@@ -1,7 +1,8 @@
 //  OpenShift sample Node application
 var express = require('express'),
     app     = express(),
-    morgan  = require('morgan');
+    morgan  = require('morgan'),
+    readChangeLog = require('./changeLogReader');
     
 Object.assign=require('object-assign')
 
@@ -93,6 +94,12 @@ app.get('/', function (req, res) {
     res.render('index.html', { pageCountMessage : null});
   }
 });
+
+app.get('/test', async function (req, res) {
+  const log = await readChangeLog();
+  res.status(200).send(log + '\n');
+});
+
 
 app.get('/pagecount', function (req, res) {
   // try to initialize the db on every request if it's not already
